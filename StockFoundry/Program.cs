@@ -4,6 +4,7 @@ int stock = 100;
 int minimumStock = 10;
 decimal price = 19.99m;
 decimal totalValue = 0;
+string prompt = "Bitte geben Sie die Anzahl der Artikel ein: ";
 
 bool running = true;
 while (running)
@@ -21,25 +22,13 @@ while (running)
     {
         case "1":
             Console.WriteLine("Wareneingang");
-            Console.Write("Bitte geben Sie die Anzahl der eingehenden Artikel ein: ");
-            string? input = Console.ReadLine();
-            if (!int.TryParse(input, out int incoming) || incoming <= 0)
-            {
-                Console.WriteLine("Ungültige Eingabe. Bitte geben Sie eine gültige Zahl ein.");
-                continue;
-            }
+            int incoming = ReadPositiveNumber(prompt);
             stock += incoming;
             Console.WriteLine($"Neuer Lagerbestand nach Wareneingang von {incoming} Stück: {stock}");
             break;
         case "2":
             Console.WriteLine("Warenausgang");
-            Console.Write("Bitte geben Sie die Anzahl der ausgehenden Artikel ein: ");
-            string? outgoingInput = Console.ReadLine();
-            if (!int.TryParse(outgoingInput, out int outgoing) || outgoing <= 0)
-            {
-                Console.WriteLine("Ungültige Eingabe. Bitte geben Sie eine gültige Zahl ein.");
-                continue;
-            }
+            int outgoing = ReadPositiveNumber("Bitte geben Sie die Anzahl der ausgehenden Artikel ein: ");
             if (stock >= outgoing)
             {
                 stock -= outgoing;
@@ -49,32 +38,13 @@ while (running)
             {
                 Console.WriteLine("Nicht genug Bestand für Warenausgang.");
             }
-            if (stock <= minimumStock)
-            {
-                Console.WriteLine("Warnung: Lagerbestand unter Mindestbestand!");
-            }
-            else
-            {
-                Console.WriteLine("Lagerbestand ist ausreichend.");
-            }
+            CheckMinimumStock(stock, minimumStock);
             break;
         case "3":
-            Console.WriteLine("Lagerbestand prüfen");
-            Console.WriteLine($"Artikelnummer: {itemNumber}");
-            Console.WriteLine($"Artikelname: {itemName}");
-            Console.WriteLine($"Lagerbestand: {stock}");
-            Console.WriteLine($"Mindestbestand: {minimumStock}");
-            Console.WriteLine($"Preis: {price:C}");
+            ShowStockDetails(itemNumber, itemName, stock, minimumStock, price);
             totalValue = stock * price;
             Console.WriteLine($"Gesamtwert des Lagerbestands: {totalValue:C}");
-            if (stock <= minimumStock)
-            {
-                Console.WriteLine("Warnung: Lagerbestand unter Mindestbestand!");
-            }
-            else
-            {
-                Console.WriteLine("Lagerbestand ist ausreichend.");
-            }
+            CheckMinimumStock(stock, minimumStock);
             break;
         case "0":
             running = false;
@@ -87,3 +57,36 @@ while (running)
 }
 Console.WriteLine("Programm beendet.");
 
+void CheckMinimumStock (int stock, int minimumStock)
+{
+    if (stock <= minimumStock)
+    {
+        Console.WriteLine("Warnung: Lagerbestand unter Mindestbestand!");
+    }
+    else
+    {
+        Console.WriteLine("Lagerbestand ist ausreichend.");
+    }
+}
+void ShowStockDetails(int itemNumber, string itemName, int stock, int minimumStock, decimal price)
+{
+    Console.WriteLine($"Artikelnummer: {itemNumber}");
+    Console.WriteLine($"Artikelname: {itemName}");
+    Console.WriteLine($"Lagerbestand: {stock}");
+    Console.WriteLine($"Mindestbestand: {minimumStock}");
+    Console.WriteLine($"Preis: {price:C}");
+}
+int ReadPositiveNumber(string prompt)
+{
+    int number;
+    do
+    {
+        Console.Write(prompt);
+        string? input = Console.ReadLine();
+        if (!int.TryParse(input, out number) || number <= 0)
+        {
+            Console.WriteLine("Ungültige Eingabe. Bitte geben Sie eine positive Zahl ein.");
+        }
+    } while (number <= 0);
+    return number;
+}
