@@ -21,12 +21,11 @@ Bitte wählen Sie eine Option:
 0. Beenden
 Ihre Auswahl: 2
 Warenausgang
-Bitte geben Sie die Anzahl der ausgehenden Artikel ein: 145
-Neuer Lagerbestand nach Warenausgang von 145 Stück: 5
+Bitte geben Sie die Anzahl der ausgehenden Artikel ein: 95
+Neuer Lagerbestand nach Warenausgang von 95 Stück: 5
 Warnung: Lagerbestand unter Mindestbestand!
 
 Ihre Auswahl: 3
-Lagerbestand prüfen
 Artikelnummer: 12345
 Artikelname: Beispielartikel
 Lagerbestand: 5
@@ -39,7 +38,9 @@ Warnung: Lagerbestand unter Mindestbestand!
 ## Technik
 
 - C# mit .NET 10, Konsolenanwendung
+- Der Artikel ist eine eigene Klasse `Item` mit Properties für Nummer, Name, Bestand, Mindestbestand und Preis
 - Menü mit einer `while`-Schleife und `switch`
+- Wiederkehrende Abläufe stehen in eigenen Methoden, z. B. `ReadPositiveNumber` für die Zahleneingabe und `CheckMinimumStock` für die Warnung
 - Eingaben werden mit `int.TryParse` geprüft statt mit `Convert.ToInt32`, damit falsche Eingaben nicht zum Absturz führen
 - Preise und Lagerwert als `decimal`, damit bei Geldbeträgen keine Rundungsfehler entstehen
 - Geldbeträge werden mit `:C` passend zur Spracheinstellung formatiert (z. B. `19,99 €`)
@@ -51,6 +52,9 @@ Warnung: Lagerbestand unter Mindestbestand!
 - Grenzfälle testen: Was passiert bei genau 0, bei negativen Zahlen, bei Buchstaben?
 - Code läuft von oben nach unten: erst rechnen, dann ausgeben
 - Den Unterschied zwischen `return`, `break` und `continue`
+- Methoden mit Parametern und Rückgabewert schreiben
+- Klassen und Objekte: Eine Klasse ist der Bauplan, mit `new` entsteht daraus ein Objekt
+- Warum ein `string` einen Startwert braucht: Der Unterschied zwischen `null` und `""`
 - Mit Git in kleinen Schritten arbeiten und jeden Fortschritt committen
 
 ## Über das Projekt
@@ -59,8 +63,7 @@ Ich möchte eine Ausbildung als Fachinformatiker für Anwendungsentwicklung mach
 
 ## Geplant
 
-- Wiederholten Code in Methoden auslagern
-- Mehrere Artikel statt nur einem
+- Mehrere Artikel statt nur einem, gespeichert in einer Liste
 - Artikel anlegen, bearbeiten und löschen
 - Lagerdaten in einer Datei speichern, damit sie nach dem Beenden erhalten bleiben
 - Später: eine Datenbank anbinden
