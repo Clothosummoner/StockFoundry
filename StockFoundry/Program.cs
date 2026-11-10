@@ -1,11 +1,13 @@
-﻿int itemNumber = 12345;
-string itemName = "Beispielartikel";
-int stock = 100;
-int minimumStock = 10;
-decimal price = 19.99m;
-decimal totalValue = 0;
+﻿using StockFoundry;
 string prompt = "Bitte geben Sie die Anzahl der Artikel ein: ";
-
+Item item = new Item
+{
+    Name = "Beispielartikel",
+    Number = 12345,
+    Stock = 100,
+    MinimumStock = 10,
+    Price = 19.99m
+};
 bool running = true;
 while (running)
 {
@@ -23,28 +25,28 @@ while (running)
         case "1":
             Console.WriteLine("Wareneingang");
             int incoming = ReadPositiveNumber(prompt);
-            stock += incoming;
-            Console.WriteLine($"Neuer Lagerbestand nach Wareneingang von {incoming} Stück: {stock}");
+            item.Stock += incoming;
+            Console.WriteLine($"Neuer Lagerbestand nach Wareneingang von {incoming} Stück: {item.Stock}");
             break;
         case "2":
             Console.WriteLine("Warenausgang");
             int outgoing = ReadPositiveNumber("Bitte geben Sie die Anzahl der ausgehenden Artikel ein: ");
-            if (stock >= outgoing)
+            if (item.Stock >= outgoing)
             {
-                stock -= outgoing;
-                Console.WriteLine($"Neuer Lagerbestand nach Warenausgang von {outgoing} Stück: {stock}");
+                item.Stock -= outgoing;
+                Console.WriteLine($"Neuer Lagerbestand nach Warenausgang von {outgoing} Stück: {item.Stock}");
             }
             else
             {
                 Console.WriteLine("Nicht genug Bestand für Warenausgang.");
             }
-            CheckMinimumStock(stock, minimumStock);
+            CheckMinimumStock(item.Stock, item.MinimumStock);
             break;
         case "3":
-            ShowStockDetails(itemNumber, itemName, stock, minimumStock, price);
-            totalValue = stock * price;
+            ShowStockDetails(item.Number, item.Name, item.Stock, item.MinimumStock, item.Price);
+            decimal totalValue = item.Stock * item.Price;
             Console.WriteLine($"Gesamtwert des Lagerbestands: {totalValue:C}");
-            CheckMinimumStock(stock, minimumStock);
+            CheckMinimumStock(item.Stock, item.MinimumStock);
             break;
         case "0":
             running = false;
