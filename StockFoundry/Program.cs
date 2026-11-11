@@ -40,13 +40,13 @@ while (running)
             {
                 Console.WriteLine("Nicht genug Bestand für Warenausgang.");
             }
-            CheckMinimumStock(item.Stock, item.MinimumStock);
+            CheckMinimumStock(item);
             break;
         case "3":
-            ShowStockDetails(item.Number, item.Name, item.Stock, item.MinimumStock, item.Price);
+            ShowStockDetails(item);
             decimal totalValue = item.Stock * item.Price;
             Console.WriteLine($"Gesamtwert des Lagerbestands: {totalValue:C}");
-            CheckMinimumStock(item.Stock, item.MinimumStock);
+            CheckMinimumStock(item);
             break;
         case "0":
             running = false;
@@ -59,24 +59,24 @@ while (running)
 }
 Console.WriteLine("Programm beendet.");
 
-void CheckMinimumStock (int stock, int minimumStock)
+void CheckMinimumStock (Item item)
 {
-    if (stock <= minimumStock)
+    if (item.Stock <= item.MinimumStock)
     {
-        Console.WriteLine("Warnung: Lagerbestand unter Mindestbestand!");
+        Console.WriteLine("Warnung: Mindestbestand erreicht oder unter Mindestbestand!");
     }
     else
     {
         Console.WriteLine("Lagerbestand ist ausreichend.");
     }
 }
-void ShowStockDetails(int itemNumber, string itemName, int stock, int minimumStock, decimal price)
+void ShowStockDetails(Item item)
 {
-    Console.WriteLine($"Artikelnummer: {itemNumber}");
-    Console.WriteLine($"Artikelname: {itemName}");
-    Console.WriteLine($"Lagerbestand: {stock}");
-    Console.WriteLine($"Mindestbestand: {minimumStock}");
-    Console.WriteLine($"Preis: {price:C}");
+    Console.WriteLine($"Artikelnummer: {item.Number}");
+    Console.WriteLine($"Artikelname: {item.Name}");
+    Console.WriteLine($"Lagerbestand: {item.Stock}");
+    Console.WriteLine($"Mindestbestand: {item.MinimumStock}");
+    Console.WriteLine($"Preis: {item.Price:C}");
 }
 int ReadPositiveNumber(string prompt)
 {
