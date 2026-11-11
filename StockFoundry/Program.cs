@@ -1,13 +1,12 @@
 ﻿using StockFoundry;
 string prompt = "Bitte geben Sie die Anzahl der Artikel ein: ";
-Item item = new Item
+List<Item> items = new List<Item>
 {
-    Name = "Beispielartikel",
-    Number = 12345,
-    Stock = 100,
-    MinimumStock = 10,
-    Price = 19.99m
+    new Item { Name = "Artikel A", Number = 1, Stock = 10, MinimumStock = 5, Price = 9.99m },
+    new Item { Name = "Artikel B", Number = 2, Stock = 20, MinimumStock = 10, Price = 19.99m },
+    new Item { Name = "Artikel C", Number = 3, Stock = 5, MinimumStock = 2, Price = 29.99m }
 };
+
 bool running = true;
 while (running)
 {
@@ -24,29 +23,44 @@ while (running)
     {
         case "1":
             Console.WriteLine("Wareneingang");
-            int incoming = ReadPositiveNumber(prompt);
-            item.Stock += incoming;
-            Console.WriteLine($"Neuer Lagerbestand nach Wareneingang von {incoming} Stück: {item.Stock}");
+            Item? incomingItem = SelectItem();
+            if (incomingItem != null)
+            {
+                int incoming = ReadPositiveNumber(prompt);
+                incomingItem.Stock += incoming;
+                Console.WriteLine($"Neuer Lagerbestand von {incomingItem.Name}: {incomingItem.Stock}");
+            }
             break;
         case "2":
             Console.WriteLine("Warenausgang");
-            int outgoing = ReadPositiveNumber("Bitte geben Sie die Anzahl der ausgehenden Artikel ein: ");
-            if (item.Stock >= outgoing)
+            Item? outgoingItem = SelectItem();
+            if (outgoingItem != null)
             {
-                item.Stock -= outgoing;
-                Console.WriteLine($"Neuer Lagerbestand nach Warenausgang von {outgoing} Stück: {item.Stock}");
+                int outgoing = ReadPositiveNumber(prompt);
+                if (outgoingItem.Stock >= outgoing)
+                {
+                    outgoingItem.Stock -= outgoing;
+                    Console.WriteLine($"Neuer Lagerbestand nach Warenausgang von {outgoing} Stück: {outgoingItem.Stock}");
+                }
+                else
+                {
+                    Console.WriteLine("Nicht genug Bestand für Warenausgang.");
+                }
+                CheckMinimumStock(outgoingItem);
             }
-            else
-            {
-                Console.WriteLine("Nicht genug Bestand für Warenausgang.");
-            }
-            CheckMinimumStock(item);
+
             break;
         case "3":
-            ShowStockDetails(item);
-            decimal totalValue = item.Stock * item.Price;
+            decimal totalValue = 0;
+            foreach (Item item in items)
+            {
+                Console.WriteLine();
+                ShowStockDetails(item);
+                CheckMinimumStock(item);
+                totalValue += item.Stock * item.Price;
+            }
+            Console.WriteLine();
             Console.WriteLine($"Gesamtwert des Lagerbestands: {totalValue:C}");
-            CheckMinimumStock(item);
             break;
         case "0":
             running = false;
@@ -59,7 +73,7 @@ while (running)
 }
 Console.WriteLine("Programm beendet.");
 
-void CheckMinimumStock (Item item)
+void CheckMinimumStock(Item item)
 {
     if (item.Stock <= item.MinimumStock)
     {
@@ -77,6 +91,25 @@ void ShowStockDetails(Item item)
     Console.WriteLine($"Lagerbestand: {item.Stock}");
     Console.WriteLine($"Mindestbestand: {item.MinimumStock}");
     Console.WriteLine($"Preis: {item.Price:C}");
+}
+Item? SelectItem()
+{  
+    Console.WriteLine("Vorhandene Artikel:");
+    foreach (Item item in items)
+    {
+        Console.WriteLine($"{item.Number}: {item.Name}");
+
+    }
+    int number = ReadPositiveNumber("Bitte geben Sie die Artikelnummer ein: ");
+    foreach (Item item in items)
+    {
+        if (item.Number == number)
+        {
+            return item;
+        }
+    }
+    Console.WriteLine("Kein Artikel mit dieser Nummer gefunden.");
+    return null;
 }
 int ReadPositiveNumber(string prompt)
 {
