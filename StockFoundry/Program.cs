@@ -15,6 +15,7 @@ while (running)
     Console.WriteLine("1. Wareneingang");
     Console.WriteLine("2. Warenausgang");
     Console.WriteLine("3. Lagerbestand prüfen");
+    Console.WriteLine("4. Artikel hinzufügen");
     Console.WriteLine("0. Beenden");
     Console.Write("Ihre Auswahl: ");
     string? choice = Console.ReadLine();
@@ -65,8 +66,23 @@ while (running)
         case "0":
             running = false;
             break;
+        case "4":
+            Console.WriteLine("Artikel hinzufügen");
+            string name = ReadText("Bitte geben Sie den Artikelnamen ein: ");
+            int number = ReadPositiveNumber("Bitte geben Sie die Artikelnummer ein: ");
+            Item newItem = new Item
+            {
+                Name = name,
+                Number = number,
+                Stock = 0,
+                MinimumStock = 0,
+                Price = 0,
+            };
+            items.Add(newItem);
+            Console.WriteLine($"Der Artikel {name} mit der Nummer {number} wurde dem Bestand hinzugefügt.");
+            break;
         default:
-            Console.WriteLine("Ungültige Auswahl. Bitte wählen Sie 1, 2, 3 oder 0.");
+            Console.WriteLine("Ungültige Auswahl. Bitte wählen Sie 1, 2, 3, 4 oder 0.");
             break;
     }
 
@@ -93,7 +109,7 @@ void ShowStockDetails(Item item)
     Console.WriteLine($"Preis: {item.Price:C}");
 }
 Item? SelectItem()
-{  
+{
     Console.WriteLine("Vorhandene Artikel:");
     foreach (Item item in items)
     {
@@ -124,4 +140,19 @@ int ReadPositiveNumber(string prompt)
         }
     } while (number <= 0);
     return number;
+}
+string ReadText(string prompt)
+{
+    string? input;
+    do
+    {
+        Console.Write(prompt);
+        input = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            Console.WriteLine("Ungültige Eingabe. Bitte geben Sie einen Artikelnamen ein.");
+        }
+    } while (string.IsNullOrWhiteSpace(input));
+
+    return input;
 }
