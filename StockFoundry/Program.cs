@@ -8,6 +8,7 @@ List<Item> items = new List<Item>
 };
 
 bool running = true;
+
 while (running)
 {
     Console.WriteLine();
@@ -70,17 +71,26 @@ while (running)
             Console.WriteLine("Artikel hinzufügen");
             string name = ReadText("Bitte geben Sie den Artikelnamen ein: ");
             int number = ReadPositiveNumber("Bitte geben Sie die Artikelnummer ein: ");
-            Item newItem = new Item
+            if (NumberExists(number))
             {
-                Name = name,
-                Number = number,
-                Stock = 0,
-                MinimumStock = 0,
-                Price = 0,
-            };
-            items.Add(newItem);
-            Console.WriteLine($"Der Artikel {name} mit der Nummer {number} wurde dem Bestand hinzugefügt.");
-            break;
+                Console.WriteLine("Diese Artikelnummer ist bereits vergeben, bitte benutzen Sie eine andere Artikelnummer");
+                break;
+            }
+            else
+            {
+                Item newItem = new Item
+                {
+                    Name = name,
+                    Number = number,
+                    Stock = 0,
+                    MinimumStock = 0,
+                    Price = 0,
+                };
+                items.Add(newItem);
+                Console.WriteLine($"Der Artikel {name} mit der Nummer {number} wurde dem Bestand hinzugefügt.");
+                break;
+            }
+
         default:
             Console.WriteLine("Ungültige Auswahl. Bitte wählen Sie 1, 2, 3, 4 oder 0.");
             break;
@@ -155,4 +165,15 @@ string ReadText(string prompt)
     } while (string.IsNullOrWhiteSpace(input));
 
     return input;
+}
+bool NumberExists(int number)
+{
+    foreach (Item item in items)
+    {
+        if (number == item.Number)
+        {
+            return true;
+        }
+    }
+    return false;
 }
