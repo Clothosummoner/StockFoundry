@@ -86,6 +86,7 @@ while (running)
                     MinimumStock = 0,
                     Price = 0,
                 };
+                newItem.Stock = ReadNonNegativeNumber("Bitte geben Sie den Bestand des neuen Artikels ein: ");
                 items.Add(newItem);
                 Console.WriteLine($"Der Artikel {name} mit der Nummer {number} wurde dem Bestand hinzugefügt.");
                 break;
@@ -176,4 +177,25 @@ bool NumberExists(int number)
         }
     }
     return false;
+}
+
+int ReadNonNegativeNumber(string prompt)
+{
+    bool isValid = false;
+    int number;
+    do
+    {
+        Console.Write(prompt);
+        string? input = Console.ReadLine();
+        if (!int.TryParse(input, out number) || number < 0)
+        {
+
+            Console.WriteLine("Ungültige Eingabe. Bitte geben Sie eine nicht negative Zahl ein.");
+        }
+        else
+        {
+            isValid = true;
+        }
+    } while (!isValid);
+    return number;
 }
