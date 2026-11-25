@@ -87,6 +87,7 @@ while (running)
                     Price = 0,
                 };
                 newItem.Stock = ReadNonNegativeNumber("Bitte geben Sie den Bestand des neuen Artikels ein: ");
+                newItem.MinimumStock = ReadPositiveNumber("Bitte geben Sie den Mindestbestand des neuen Artikels ein: ");
                 items.Add(newItem);
                 Console.WriteLine($"Der Artikel {name} mit der Nummer {number} wurde dem Bestand hinzugefügt.");
                 break;
